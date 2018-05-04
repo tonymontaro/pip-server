@@ -5,3 +5,4 @@ export DATABASE_URL="postgresql://localhost/pip_server"
 export TEST_DATABASE="postgresql://localhost/pip_test"
 export FLASK_APP="$(pwd)/main.py"
 export FLASK_DEBUG=1
+export MANAGER_ACCESS_KEY=""

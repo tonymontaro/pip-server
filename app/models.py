@@ -11,8 +11,8 @@ class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(256), nullable=False, unique=True)
-    password = db.Column(db.String(256), nullable=False)
+    email = db.Column(db.String(255), nullable=False, unique=True)
+    password = db.Column(db.String(255), nullable=False)
 
     def __init__(self, email, password):
         """Initialize the user with an email and a password."""
@@ -32,7 +32,8 @@ class User(db.Model):
         db.session.add(self)
         db.session.commit()
 
-    def generate_token(self, user_id):
+    @staticmethod
+    def generate_token(user_id):
         """Generates the access token to be used as the Authorization header"""
 
         try:
@@ -61,3 +62,49 @@ class User(db.Model):
             return "Expired token. Please log in to get a new token"
         except jwt.InvalidTokenError:
             return "Invalid token. Please register or login"
+
+
+class PIPModel(db.Model):
+    """This class defines the PIP table."""
+
+    __tablename__ = 'pips'
+
+    id = db.Column(db.Integer, primary_key=True)
+    fellow = db.Column(db.String(255), nullable=False)
+    location = db.Column(db.String(255))
+    fellow_class = db.Column(db.Integer)
+    manager = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
+    people_rep = db.Column(db.String(255))
+    status = db.Column(db.String(255))
+    start_date = db.Column(db.DateTime, default=db.func.current_timestamp())
+    end_date = db.Column(db.DateTime)
+    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
+                              onupdate=db.func.current_timestamp())
+
+    def __init__(self, fellow, manager):
+        """Initialize the PIP with fellow and his/her manager."""
+        self.fellow = fellow
+        self.manager = manager
+
+    def save(self):
+        """Save a PIP."""
+        db.session.add(self)
+        db.session.commit()
+
+    @staticmethod
+    def get_pip(fellow):
+        """This method gets all the PIP for a given fellow."""
+        return PIPModel.query.filter_by(fellow=fellow)
+
+    @staticmethod
+    def all():
+        return PIPModel.query.all()
+
+    def delete(self):
+        """Deletes a given PIP."""
+        db.session.delete(self)
+        db.session.commit()
+
+    def __repr__(self):
+        """Return a representation of a PIP instance."""
+        return "<Bucketlist: {}>".format(self.name)

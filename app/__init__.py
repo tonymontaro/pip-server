@@ -12,6 +12,7 @@ def create_app(config_name):
 
     from app.models import User
     from app.auth.routes import RegistrationView, LoginView
+    from app.pip.routes import PIPView
 
     app = Flask(__name__)
 
@@ -23,4 +24,5 @@ def create_app(config_name):
     api.add_resource(Home, '/')
     api.add_resource(RegistrationView, '/auth/register')
     api.add_resource(LoginView, '/auth/login')
+    api.add_resource(PIPView, '/pip')
     return app
