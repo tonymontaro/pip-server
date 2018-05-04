@@ -1,21 +1,9 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_restful import Api
-from server.resources.home import Home
 import os
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+from app import create_app
 
-if os.environ["environment"] == "development":
-    app.config.from_object('config.DevelopmentConfig')
-else:
-    app.config.from_object('config.Config')
-db = SQLAlchemy(app)
-api = Api(app)
-
-# Routes
-api.add_resource(Home, '/')
+config_name = os.getenv('ENVIRONMENT')
+app = create_app(config_name)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
