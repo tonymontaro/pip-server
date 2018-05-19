@@ -29,3 +29,5 @@ six==1.11.0
 SQLAlchemy==1.2.6
 Werkzeug==0.14.1
 wrapt==1.10.11
+flask-restful=0.3.6
+
